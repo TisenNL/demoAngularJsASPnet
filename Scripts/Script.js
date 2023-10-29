@@ -2,10 +2,19 @@
 
 var app = angular
         .module("myModule", [])
-        .controller("myController", function ($scope, $http) {
+        .controller("myController", function ($scope, $http, $log) {
 
-            $http.get("EmployeeService.asmx/GetAllEmployees")
-                 .then(function (response) {
-                     $scope.employees = response.data;
-                 });
+            var successCallBack = function (response) {
+                $scope.employees = response.data;
+            }
+
+            var errorCallBack = function (response) {
+                $scope.error = response.data;
+            }
+
+            $http({
+                method:'GET',
+                url: "EmployeeService.asmx/GetAllEmployees"
+            })
+                 .then(successCallBack, errorCallBack);
         });
